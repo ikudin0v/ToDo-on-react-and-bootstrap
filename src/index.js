@@ -41,15 +41,13 @@ const JournalEditComponent = () => {
 const App = () => {
     let initialTaskList = []
 
-    const [taskList, setCurrentTaskList] = useState(initialTaskList)
-    // const [taskList, setCurrentTaskList] = useState(initialTaskList.filter(item => item.state == "current"))
-    // const [doneTaskList, setDoneTaskList] = useState(initialTaskList.filter(item => item.state == "done"))
+    const [taskList, setTaskList] = useState(initialTaskList)
 
     function addTask() {
-        if (document.getElementById("inputText").value != "") {
+        if (document.getElementById("inputText").value !== "") {
             let inputTaskId
             taskList.length === 0 ? inputTaskId = 0 : inputTaskId = taskList[taskList.length-1].taskId + 1
-            setCurrentTaskList([...taskList, {
+            setTaskList([...taskList, {
                                         taskId: inputTaskId,
                                         text: document.getElementById("inputText").value,
                                         state: "current"
@@ -59,8 +57,8 @@ const App = () => {
     }
 
     function removeTask(id) {
-        const newTaskList = taskList.filter(item => item.taskId != id)
-        setCurrentTaskList(newTaskList)
+        const newTaskList = taskList.filter(item => item.taskId !== id)
+        setTaskList(newTaskList)
     }
 
     function editTask(id) {
@@ -69,25 +67,28 @@ const App = () => {
         } else {
             document.getElementById("input"+id).setAttribute("disabled", "disabled")
             let newTaskList = taskList.map(item => {
-                if (item.taskId === id) {item.text = document.getElementById("input"+id).value}
+                if (item.taskId === id) {
+                    item.text = document.getElementById("input"+id).value
+                    document.getElementById("input"+id).value = ""
+                }
+                return (item)
             })
+            setTaskList(newTaskList)
         }
     }
 
     function doneTask(id) {
-        // console.log(taskList)
-        // console.log(id)
-        // const newTaskList = taskList.map(item => {if (item.taskId === id){item.state = "done"}
-        taskList.map(item => {if (item.taskId === id){item.state = "done"}})
-        setCurrentTaskList(taskList)
-        // setCurrentTaskList(newTaskList)
-        // console.log(newTaskList)
+        let newTaskList = taskList.map(item => {
+            if (item.taskId === id){item.state = "done"}
+            return (item)
+        })
+        setTaskList(newTaskList)
     }
 
 
 
     return (
-    <div className="container-sm" style={{border: "red solid 1px"}}>
+    <div className="container-sm">
 
 
         <div>
@@ -101,7 +102,7 @@ const App = () => {
 
         
         <div>
-            <h3 className="text-center">{taskList.filter(item => item.state === "current").length == 0 ? "NO CURRENT TASKS" : "CURRENT TASKS"}</h3>
+            <h3 className="text-center">{taskList.filter(item => item.state === "current").length === 0 ? "NO CURRENT TASKS" : "CURRENT TASKS"}</h3>
             <ul className="list-group">
                 {taskList.filter(item => item.state === "current").map((task) => (
                     <li className="list-group-item" key={task.taskId}>
