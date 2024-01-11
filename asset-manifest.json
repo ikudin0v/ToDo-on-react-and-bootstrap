@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/ToDo-on-react-and-bootstrap/static/css/main.3d85d988.css",
+    "main.js": "/ToDo-on-react-and-bootstrap/static/js/main.a314eedf.js",
+    "index.html": "/ToDo-on-react-and-bootstrap/index.html",
+    "main.3d85d988.css.map": "/ToDo-on-react-and-bootstrap/static/css/main.3d85d988.css.map",
+    "main.a314eedf.js.map": "/ToDo-on-react-and-bootstrap/static/js/main.a314eedf.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3d85d988.css",
+    "static/js/main.a314eedf.js"
+  ]
+}
