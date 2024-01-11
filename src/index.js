@@ -41,8 +41,11 @@ const App = () => {
     let initialTaskList = []
  
     const [taskList, setTaskList] = useState(initialTaskList)
-
+const onKeyDown = key => {
+    if (key.keyCode === 13) {addTask()}
+}
     function addTask() {
+        console.log('dnkjfnvfgbfg')
         if (document.getElementById("inputText").value !== "") {
             let inputTaskId
             taskList.length === 0 ? inputTaskId = 0 : inputTaskId = taskList[taskList.length-1].taskId + 1
@@ -64,6 +67,7 @@ const App = () => {
     function editTask(id) {
         if (document.getElementById("input"+id).disabled === true) {
             document.getElementById("input"+id).removeAttribute("disabled")
+            document.getElementById("input"+id).value = document.getElementById("input"+id).placeholder
         } else {
             document.getElementById("input"+id).setAttribute("disabled", "disabled")
             let newTaskList = taskList.map(item => {
@@ -94,7 +98,7 @@ const App = () => {
         <div>
             <h1 className="text-center">TO DO LIST</h1>
             <div className="input-group mb-3">
-                <input type="text" id="inputText" className="form-control" placeholder="Add new task!"/>
+                <input type="text" id="inputText" className="form-control" placeholder="Add new task!" onKeyDown={onKeyDown}/>
                 <button type="button" className="btn btn-primary" onClick={addTask}><SvgAddComponent /></button>
             </div>
         </div>
