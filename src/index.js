@@ -41,14 +41,15 @@ const JournalEditComponent = () => {
 const App = () => {
     let initialTaskList = []
 
-    const [currentTaskList, setCurrentTaskList] = useState(initialTaskList.filter(item => item.state == "current"))
-    const [doneTaskList, setDoneTaskList] = useState(initialTaskList.filter(item => item.state == "done"))
+    const [taskList, setCurrentTaskList] = useState(initialTaskList)
+    // const [taskList, setCurrentTaskList] = useState(initialTaskList.filter(item => item.state == "current"))
+    // const [doneTaskList, setDoneTaskList] = useState(initialTaskList.filter(item => item.state == "done"))
 
     function addTask() {
         if (document.getElementById("inputText").value != "") {
             let inputTaskId
-            currentTaskList.length === 0 ? inputTaskId = 0 : inputTaskId = currentTaskList.length
-            setCurrentTaskList([...currentTaskList, {
+            taskList.length === 0 ? inputTaskId = 0 : inputTaskId = taskList[taskList.length-1].taskId + 1
+            setCurrentTaskList([...taskList, {
                                         taskId: inputTaskId,
                                         text: document.getElementById("inputText").value,
                                         state: "current"
@@ -58,7 +59,7 @@ const App = () => {
     }
 
     function removeTask(id) {
-        const newTaskList = currentTaskList.filter(item => item.taskId != id)
+        const newTaskList = taskList.filter(item => item.taskId != id)
         setCurrentTaskList(newTaskList)
     }
 
@@ -67,14 +68,20 @@ const App = () => {
             document.getElementById("input"+id).removeAttribute("disabled")
         } else {
             document.getElementById("input"+id).setAttribute("disabled", "disabled")
-            let newTaskList = currentTaskList.map(item => {
+            let newTaskList = taskList.map(item => {
                 if (item.taskId === id) {item.text = document.getElementById("input"+id).value}
             })
         }
     }
 
     function doneTask(id) {
-        
+        // console.log(taskList)
+        // console.log(id)
+        // const newTaskList = taskList.map(item => {if (item.taskId === id){item.state = "done"}
+        taskList.map(item => {if (item.taskId === id){item.state = "done"}})
+        setCurrentTaskList(taskList)
+        // setCurrentTaskList(newTaskList)
+        // console.log(newTaskList)
     }
 
 
@@ -94,9 +101,9 @@ const App = () => {
 
         
         <div>
-            <h3 className="text-center">{currentTaskList.length === 0 ? "NO CURRENT TASKS" : "CURRENT TASKS"}</h3>
+            <h3 className="text-center">{taskList.filter(item => item.state === "current").length == 0 ? "NO CURRENT TASKS" : "CURRENT TASKS"}</h3>
             <ul className="list-group">
-                {currentTaskList.map((task) => (
+                {taskList.filter(item => item.state === "current").map((task) => (
                     <li className="list-group-item" key={task.taskId}>
                         <div className="input-group mb-3">
                             <button type="button" className="btn btn-success" onClick={() => {doneTask(task.taskId)}}><JournalDoneComponent /></button>
@@ -111,12 +118,12 @@ const App = () => {
         <br />
 
         <div>
-        <h3 className="text-center">{doneTaskList.length === 0 ? "NO COMPLETED TASKS" : "COMPLETED TASKS"}</h3>
+        <h3 className="text-center">{taskList.filter(item => item.state === "done").length === 0 ? "NO COMPLETED TASKS" : "COMPLETED TASKS"}</h3>
         <ul className="list-group">
-            {doneTaskList.map((task) => (
-                <li className="list-group-item">
+            {taskList.filter(item => item.state === "done").map((task) => (
+                <li className="list-group-item" key={task.taskId}>
                     <div className="input-group mb-3">
-                        <input type="text" id="CurrentID" className="form-control" placeholder="Add new task!" disabled/>
+                        <input type="text" id="CurrentID" className="form-control" placeholder={task.text} disabled/>
                         <button type="button" className="btn btn-danger" onClick={() => {removeTask(task.taskId)}}><JournalRemoveComponent /></button>
                     </div>
                 </li>
